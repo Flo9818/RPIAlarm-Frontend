@@ -1,4 +1,4 @@
-FROM nginx:latest
+FROM nginx:1.15.4
 
 RUN apt-get update && apt-get install curl sudo gnupg gnupg2 gnupg1 -y
 
