@@ -1,4 +1,4 @@
-FROM nginx:1.15.4
+FROM nginx:stable
 
 RUN apt-get update && apt-get install curl sudo gnupg gnupg2 gnupg1 -y
 
@@ -27,7 +27,13 @@ COPY nginx/default.conf /etc/nginx/conf.d/
 ## Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
 
-RUN ls -la
 ## From 'builder' stage copy over the artifacts in dist folder to default nginx public folder
 RUN cp dist/* /usr/share/nginx/html
+
+RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx
+
+EXPOSE 80
+
+RUN sed -i.bak 's/^user/#user/' /etc/nginx/nginx.conf
+
 CMD ["nginx", "-g", "daemon off;"]

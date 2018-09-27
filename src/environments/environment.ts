@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://rpialarm-rest.dev.paas.viessmann.com'
+  baseUrl: 'http://rpialarm-rest-internal-r-vi-on-air-alert.dev.paas.viessmann.net'
 };
 
 /*
