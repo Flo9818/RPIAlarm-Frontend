@@ -1,4 +1,10 @@
-FROM node:8-alpine as builder
+FROM nginx:latest
+
+RUN apt-get update && apt-get install curl sudo gnupg gnupg2 gnupg1 -y
+
+RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+
+RUN apt-get install nodejs npm -y
 
 COPY package.json package-lock.json ./
 
@@ -14,7 +20,6 @@ COPY . .
 ## Build the angular app in production mode and store the artifacts in dist folder
 RUN $(npm bin)/ng build --prod --aot --output-path dist
 
-FROM nginx:1.13.3-alpine
 
 ## Copy our default nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/
@@ -23,6 +28,6 @@ COPY nginx/default.conf /etc/nginx/conf.d/
 RUN rm -rf /usr/share/nginx/html/*
 
 ## From 'builder' stage copy over the artifacts in dist folder to default nginx public folder
-COPY --from=builder /ng-app/dist /usr/share/nginx/html
+COPY dist /usr/share/nginx/html
 
 CMD ["nginx", "-g", "daemon off;"]
